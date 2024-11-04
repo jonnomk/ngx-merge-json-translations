@@ -1,0 +1,9 @@
+{
+	"builders": {
+		"merge-json-translations": {
+			"implementation": "./src",
+			"schema": "./src/schema.json",
+			"description": "Merge JSON translations."
+		}
+	}
+}
