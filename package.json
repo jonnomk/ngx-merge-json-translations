@@ -1,6 +1,6 @@
 {
 	"name": "ngx-merge-json-translations",
-	"version": "1.0.13",
+	"version": "1.0.14",
 	"description": "Merge source JSON translation file to target locale JSON translation files",
 	"main": "src/index.js",
 	"builders": "builders.json",
@@ -16,6 +16,10 @@
 		"translations"
 	],
 	"private": false,
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/jonnomk/ngx-merge-json-translations"
+	},
 	"publishConfig": {
 		"access": "public"
 	},
