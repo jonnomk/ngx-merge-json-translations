@@ -78,14 +78,14 @@ function mergeJsonTranslationsBuilder(options, context) {
                 error: err.message,
             };
         }
-        context.reportStatus('🎉 Done!');
+        context.reportStatus('🎉\u00a0Done!');
         return { success: true };
     });
 }
 function mergeJson(sourceFilePath, sourceData, destinationFilePath, options, context) {
     return __awaiter(this, void 0, void 0, function* () {
         if (!(0, fs_1.existsSync)(destinationFilePath)) {
-            context.logger.info(`🔎 New locale found - creating a new file ${destinationFilePath}`);
+            context.logger.info(`🔎\u00a0New locale found - creating a new file ${destinationFilePath}`);
             const locale = destinationFilePath.split('.').slice(-2)[0];
             const json = sourceData;
             json['locale'] = locale;
@@ -141,7 +141,7 @@ function compareKeys(sourceData, destFile) {
 function mergeAddedTranslations(addedKeys, destinationFilePath, sourceFilePath, sourceData, options, context) {
     var _a;
     if (!addedKeys.length) {
-        context.logger.info(`☕ No keys to add to ${destinationFilePath}`);
+        context.logger.info(`☕\u00a0No keys to add to ${destinationFilePath}`);
         return;
     }
     const destData = readJSONFile(destinationFilePath);
@@ -157,7 +157,7 @@ function mergeAddedTranslations(addedKeys, destinationFilePath, sourceFilePath, 
         }
         destData.translations = newTranslations;
         writeJsonToFile(destinationFilePath, destData, options.indent);
-        context.logger.info(`➡️ Added ${addedKeys.length} key(s) to ${destinationFilePath}`);
+        context.logger.info(`➡️\u00a0Added ${addedKeys.length} key(s) to ${destinationFilePath}`);
     }
     else {
         context.logger.error(`Failed to read JSON from ${sourceFilePath} or ${destinationFilePath}`);
@@ -165,7 +165,7 @@ function mergeAddedTranslations(addedKeys, destinationFilePath, sourceFilePath, 
 }
 function deleteRemovedTranslations(removedKeys, destinationFilePath, options, context) {
     if (!removedKeys.length) {
-        context.logger.info(`☕ No keys to remove from ${destinationFilePath}`);
+        context.logger.info(`☕\u00a0No keys to remove from ${destinationFilePath}`);
         return;
     }
     const destData = readJSONFile(destinationFilePath);
@@ -174,7 +174,7 @@ function deleteRemovedTranslations(removedKeys, destinationFilePath, options, co
             delete destData.translations[key];
         }
         writeJsonToFile(destinationFilePath, destData, options.indent);
-        context.logger.info(`🗑️ Removed ${removedKeys.length} key(s) from ${destinationFilePath}`);
+        context.logger.info(`🗑️\u00a0Removed ${removedKeys.length} key(s) from ${destinationFilePath}`);
     }
     else {
         context.logger.error(`Failed to read JSON from ${destinationFilePath}`);
