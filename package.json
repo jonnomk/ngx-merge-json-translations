@@ -13,7 +13,8 @@
 		"i18n",
 		"merge",
 		"json",
-		"translations"
+		"translations",
+		"i18n"
 	],
 	"private": false,
 	"repository": {
