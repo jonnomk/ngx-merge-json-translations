@@ -114,7 +114,7 @@ export async function mergeJsonTranslationsBuilder (
 		};
 	}
 
-	context.reportStatus('🎉\u00a0Done!');
+	context.reportStatus('🎉 Done!');
 	return { success: true };
 }
 
@@ -127,7 +127,7 @@ async function mergeJson (
 ): Promise<void> {
 
 	if (!existsSync(destinationFilePath)) {
-		context.logger.info(`🔎\u00a0New locale found - creating a new file ${ destinationFilePath }`);
+		context.logger.info(`🔎 New locale found - creating a new file ${ destinationFilePath }`);
 		const locale = destinationFilePath.split('.').slice(-2)[0];
 		const json = sourceData;
 		json['locale'] = locale;
@@ -199,7 +199,7 @@ function mergeAddedTranslations (
 	context: BuilderContext
 ): void {
 	if (!addedKeys.length) {
-		context.logger.info(`☕\u00a0No keys to add to ${ destinationFilePath }`);
+		context.logger.info(`☕ No keys to add to ${ destinationFilePath }`);
 		return;
 	}
 
@@ -221,7 +221,7 @@ function mergeAddedTranslations (
 		destData.translations = newTranslations;
 
 		writeJsonToFile(destinationFilePath, destData, options.indent);
-		context.logger.info(`➡️\u00a0Added ${ addedKeys.length } key(s) to ${ destinationFilePath }`);
+		context.logger.info(`➡️ Added ${ addedKeys.length } key(s) to ${ destinationFilePath }`);
 	} else {
 		context.logger.error(`Failed to read JSON from ${ sourceFilePath } or ${ destinationFilePath }`);
 	}
@@ -234,7 +234,7 @@ function deleteRemovedTranslations (
 	context: BuilderContext
 ): void {
 	if (!removedKeys.length) {
-		context.logger.info(`☕\u00a0No keys to remove from ${ destinationFilePath }`);
+		context.logger.info(`☕ No keys to remove from ${ destinationFilePath }`);
 		return;
 	}
 
@@ -245,7 +245,7 @@ function deleteRemovedTranslations (
 			delete destData.translations[key];
 		}
 		writeJsonToFile(destinationFilePath, destData, options.indent);
-		context.logger.info(`🗑️\u00a0Removed ${ removedKeys.length } key(s) from ${ destinationFilePath }`);
+		context.logger.info(`🗑️ Removed ${ removedKeys.length } key(s) from ${ destinationFilePath }`);
 	} else {
 		context.logger.error(`Failed to read JSON from ${ destinationFilePath }`);
 	}
