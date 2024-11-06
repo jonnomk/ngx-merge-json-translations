@@ -3,11 +3,11 @@ import { existsSync, lstatSync, mkdirSync, readFileSync, writeFileSync } from "f
 import * as path from "path";
 
 interface IOptions {
-	locales: string[];
-	source: string;
-	destination: string;
-	sourceFile: string;
-	indent: number | string;
+	locales?: string[];
+	source?: string;
+	destination?: string;
+	sourceFile?: string;
+	indent?: number | string;
 }
 
 interface IJSONData {
@@ -19,12 +19,11 @@ interface IComparisonResult {
 	removedKeys: string[];
 }
 
-const DEFAULT_CONFIG: IOptions = {
+const DEFAULT_CONFIG = {
 	source: 'src/i18n',
 	sourceFile: 'messages.json',
 	destination: 'src/i18n',
-	locales: <string[]>[],
-	indent: '\t',
+	locales: <string[]>[]
 };
 
 function validatePaths (
@@ -146,7 +145,7 @@ async function mergeJson (
 	}
 }
 
-function writeJsonToFile (destinationFilePath: string, json: IJSONData, indent: number | string): void {
+function writeJsonToFile (destinationFilePath: string, json: IJSONData, indent: number | string = '\t'): void {
 	writeFileSync(destinationFilePath, JSON.stringify(json, null, indent), 'utf-8');
 }
 
