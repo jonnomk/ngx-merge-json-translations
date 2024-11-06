@@ -1,6 +1,6 @@
 {
 	"name": "ngx-merge-json-translations",
-	"version": "1.0.16",
+	"version": "1.0.17",
 	"description": "Merge source JSON translation file to target locale JSON translation files",
 	"main": "src/index.js",
 	"builders": "builders.json",
