@@ -26,32 +26,6 @@ const DEFAULT_CONFIG = {
 	locales: <string[]>[]
 };
 
-function validatePaths (
-	source: string,
-	destination: string,
-	sourceFilePath: string,
-	context: BuilderContext
-): {
-	isValid: boolean
-} {
-	if (!existsSync(source) || !lstatSync(source).isDirectory()) {
-		context.logger.error(`Source ${ source } doesn't exist or isn't a folder`);
-		return { isValid: false };
-	}
-
-	if (!existsSync(sourceFilePath)) {
-		context.logger.error(`Source file ${ sourceFilePath } doesn't exist`);
-		return { isValid: false };
-	}
-
-	if (existsSync(destination) && !lstatSync(destination).isDirectory()) {
-		context.logger.error(`Destination ${ destination } isn't a folder`);
-		return { isValid: false };
-	}
-
-	return { isValid: true };
-}
-
 export default createBuilder(mergeJsonTranslationsBuilder);
 
 export async function mergeJsonTranslationsBuilder (
@@ -83,7 +57,7 @@ export async function mergeJsonTranslationsBuilder (
 		return { success: false };
 	}
 
-	const sourceData = readJSONFile(sourceFilePath);
+	const sourceData = readJSONFile(sourceFilePath, context);
 	if (!sourceData) {
 		context.logger.error(`Failed to read JSON from ${ sourceFilePath }`);
 		return { success: false };
@@ -114,17 +88,43 @@ export async function mergeJsonTranslationsBuilder (
 		};
 	}
 
-	context.reportStatus('🎉 Done!');
+	context.logger.info('🎉 Done!');
 	return { success: true };
 }
 
-async function mergeJson (
+function validatePaths (
+	source: string,
+	destination: string,
+	sourceFilePath: string,
+	context: BuilderContext
+): {
+	isValid: boolean
+} {
+	if (!existsSync(source) || !lstatSync(source).isDirectory()) {
+		context.logger.error(`Source ${ source } doesn't exist or isn't a folder`);
+		return { isValid: false };
+	}
+
+	if (!existsSync(sourceFilePath)) {
+		context.logger.error(`Source file ${ sourceFilePath } doesn't exist`);
+		return { isValid: false };
+	}
+
+	if (existsSync(destination) && !lstatSync(destination).isDirectory()) {
+		context.logger.error(`Destination ${ destination } isn't a folder`);
+		return { isValid: false };
+	}
+
+	return { isValid: true };
+}
+
+function mergeJson (
 	sourceFilePath: string,
 	sourceData: IJSONData,
 	destinationFilePath: string,
 	options: IOptions,
 	context: BuilderContext
-): Promise<void> {
+): void {
 
 	if (!existsSync(destinationFilePath)) {
 		context.logger.info(`🔎 New locale found - creating a new file ${ destinationFilePath }`);
@@ -135,7 +135,7 @@ async function mergeJson (
 		return;
 	}
 
-	const comparisonResult = compareKeys(sourceData, destinationFilePath);
+	const comparisonResult = compareKeys(sourceData, destinationFilePath, context);
 
 	if (comparisonResult) {
 		mergeAddedTranslations(comparisonResult.addedKeys, destinationFilePath, sourceFilePath, sourceData, options, context);
@@ -149,25 +149,22 @@ function writeJsonToFile (destinationFilePath: string, json: IJSONData, indent: 
 	writeFileSync(destinationFilePath, JSON.stringify(json, null, indent), 'utf-8');
 }
 
-function readJSONFile (filePath: string): IJSONData | null {
+function readJSONFile (filePath: string, context: BuilderContext): IJSONData | null {
 	try {
 		const rawData = readFileSync(filePath, 'utf-8');
 		return JSON.parse(rawData) as IJSONData;
 	} catch (error) {
-		console.error(`Error reading file ${ filePath }:`, error);
+		context.logger.error(`Error reading file ${ filePath }:`, error);
 		return null;
 	}
 }
 
-function compareKeys (sourceData: IJSONData, destFile: string): IComparisonResult | null {
-	const destData = readJSONFile(destFile);
+function compareKeys (sourceData: IJSONData, destFile: string, context: BuilderContext): IComparisonResult | null {
+	const destData = readJSONFile(destFile, context);
 
-	if (
-		!sourceData?.translations ||
-		!destData?.translations
-	) {
+	if (!sourceData?.translations || !destData?.translations) {
 		return null;
-	};
+	}
 
 	const sourceKeys = new Set(Object.keys(sourceData.translations));
 	const destKeys = new Set(Object.keys(destData.translations));
@@ -203,7 +200,7 @@ function mergeAddedTranslations (
 		return;
 	}
 
-	const destData = readJSONFile(destinationFilePath);
+	const destData = readJSONFile(destinationFilePath, context);
 
 	if (destData && sourceData) {
 		const orderedTranslations: { [key: string]: any; } = { ...destData.translations };
@@ -238,7 +235,7 @@ function deleteRemovedTranslations (
 		return;
 	}
 
-	const destData = readJSONFile(destinationFilePath);
+	const destData = readJSONFile(destinationFilePath, context);
 
 	if (destData) {
 		for (const key of removedKeys) {

@@ -1,6 +1,6 @@
 # Angular merge JSON translations
 
-This builder helps merge the messages.json file, after running extract-i18n, into target files using specified locales taking care to delete removed keys and add new ones.
+This builder helps merge the `messages.json` file, after running `extract-i18n`, into target files using specified locales taking care to delete removed keys and add new ones.
 
 ## Getting Started
 
@@ -17,7 +17,7 @@ npm install ngx-merge-json-translations --save-dev
 ```
 {
   "projects": {
-    "my-project": {
+    "[PROJECT_NAME]": {
       "merge-json-translations": {
         "builder": "ngx-merge-json-translations:merge-json-translations",
         "options": {
@@ -57,3 +57,5 @@ In your `angular.json`, you can configure your `options` with the following:
 
 \
 Please note, if your `sourceFile` is named `messages.json`, then your translation files will use the same file stem i.e. `messages.en-GB.json`.
+
+Can be used directly after calling `ng-extract-i18n`. For example, add a property in your `scripts` section in `package.json` named `extract-merge` and set the value to `ng extract-i18n && npm run merge-json`.  Then in your terminal, use `npm run extract-merge` to sequentially generate your `messages.json` file and then merge it into your translation files.
