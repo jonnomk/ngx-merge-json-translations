@@ -58,4 +58,4 @@ In your `angular.json`, you can configure your `options` with the following:
 \
 Please note, if your `sourceFile` is named `messages.json`, then your translation files will use the same file stem i.e. `messages.en-GB.json`.
 
-Can be used directly after calling `ng-extract-i18n`. For example, add a property in your `scripts` section in `package.json` named `extract-merge` and set the value to `ng extract-i18n && npm run merge-json`.  Then in your terminal, use `npm run extract-merge` to sequentially generate your `messages.json` file and then merge it into your translation files.
+Can be used directly after calling `ng-extract-i18n`. For example, add a property in your `scripts` section in `package.json` named `extract-merge` and set the value to `ng extract-i18n && ng run [PROJECT_NAME]:merge-json-translations`.  Then in your terminal, use `npm run extract-merge` to sequentially generate your `messages.json` file and then merge it into your translation files.
